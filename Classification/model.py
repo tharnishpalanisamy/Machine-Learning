@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler , OneHotEncoder
 from sklearn.compose import ColumnTransformer 
 from sklearn.linear_model import LogisticRegression  
 from sklearn.model_selection import train_test_split  
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score , confusion_matrix , precision_score , recall_score , roc_auc_score 
 
 df = pd.read_csv('./train.csv') 
 
@@ -53,29 +53,46 @@ X_train , X_val , y_train , y_val = train_test_split(X , y , test_size=0.2 , ran
 model.fit(X_train , y_train) 
 prediction = model.predict(X_val) 
 
-print( 'validation accuracy : ' , accuracy_score(y_val , prediction))  
+# print( 'validation accuracy : ' , accuracy_score(y_val , prediction))  
 
 # if model evaluation is good then we need to train on entire training data 
-model.fit(X, y)
-
-testing_data = pd.read_csv('./test.csv') 
-
-testing_data['FamilySize'] = testing_data['SibSp'] + testing_data['Parch'] + 1 
-testing_data['IsAlone'] = (testing_data['FamilySize'] == 1).astype(int) 
-testing_data['Title'] = testing_data['Name'].str.split(',').str[1].str.split('.').str[0].str.strip() 
-testing_data['Title'] = testing_data['Title'].apply(lambda x : x if x in common_titles else 'Rare' ) 
 
 
-testingFeatures =  ['Age' , 'Title' , 'Fare' , 'IsAlone' , 'Embarked' , 'Sex' , 'FamilySize']  
+# model.fit(X, y)
 
-testing = model.predict(testing_data[testingFeatures])
+# testing_data = pd.read_csv('./test.csv') 
 
-print(testing) 
+# testing_data['FamilySize'] = testing_data['SibSp'] + testing_data['Parch'] + 1 
+# testing_data['IsAlone'] = (testing_data['FamilySize'] == 1).astype(int) 
+# testing_data['Title'] = testing_data['Name'].str.split(',').str[1].str.split('.').str[0].str.strip() 
+# testing_data['Title'] = testing_data['Title'].apply(lambda x : x if x in common_titles else 'Rare' ) 
 
-submission = pd.DataFrame({
-    'PassengerId' : testing_data['PassengerId'] , 
-    'Name' : testing_data['Name'] , 
-    'Survived' : testing
-})
 
-submission.to_csv('result.csv' , index=False)
+# testingFeatures =  ['Age' , 'Title' , 'Fare' , 'IsAlone' , 'Embarked' , 'Sex' , 'FamilySize']  
+
+# testing = model.predict(testing_data[testingFeatures])
+
+# # print(testing) 
+
+# submission = pd.DataFrame({
+#     'PassengerId' : testing_data['PassengerId'] , 
+#     'Name' : testing_data['Name'] , 
+#     'Survived' : testing
+# })
+
+# submission.to_csv('result.csv' , index=False)  
+
+cm = confusion_matrix(y_val ,prediction ) 
+
+print('confusion matrix' ,  cm) 
+
+precision = precision_score(y_val , prediction) 
+recall = recall_score(y_val , prediction ) 
+roc = roc_auc_score(y_val , prediction) 
+accuracy = accuracy_score(y_val , prediction)
+
+
+print('accuracy : ' , accuracy) 
+print('precision : ' , precision) 
+print('recall : ' , recall) 
+print('Roc Curve  : ' , roc)
