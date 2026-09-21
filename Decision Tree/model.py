@@ -34,7 +34,7 @@ model.fit(X , y )
 
 # plt.show() 
 
-tree1 = DecisionTreeClassifier(max_depth=2gti , random_state=42) 
+tree1 = DecisionTreeClassifier(max_depth=2 , random_state=42) 
 tree2 = DecisionTreeClassifier(max_depth=2 , random_state=42)  
 tree3 = DecisionTreeClassifier(max_depth=3 , random_state=42)   
 
