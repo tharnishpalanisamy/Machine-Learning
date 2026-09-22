@@ -95,7 +95,7 @@ model = Pipeline([
             max_depth = 17, 
             random_state=10 , 
             max_features=None  ,  
-            Bootstrap = True , 
+            bootstrap = True , 
             oob_score=True
         ) )
     ])
